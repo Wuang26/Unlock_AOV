@@ -83,4 +83,4 @@ else
 fi
 
 sed -i "s/^description=.*/$description/g" "$KOUSEI_VN2"
-echo "Done"
+"Đã xong!"
