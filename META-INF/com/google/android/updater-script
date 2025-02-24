@@ -1,4 +1,4 @@
-ui_print("🔄 Đang flash...");
+ui_print("🔄 Flashing...");
 if run_program("/system/bin/which", "magisk") != 0 then
   ui_print("Kousei_VN.");
   return;
@@ -10,4 +10,4 @@ set_metadata("/data", "uid", 0, "gid", 0, "mode", 0755);
 set_perm_recursive(0, 0, 0755, 0755, "/data/data/com.garena.game.kgvn/files/Resources/131448064/arm64-v8a");
 package_extract_file("libil2cpp.so", "/data/data/com.garena.game.kgvn/files/Resources/arm64-v8a/libil2cpp.so");
 set_metadata("/data/data/com.garena.game.kgvn/files/Resources/131448064/arm64-v8a/libil2cpp.so", "uid", 0, "gid", 0, "mode", 0755);
-ui_print("✅ Flash thành công!");
+ui_print("Done!");
