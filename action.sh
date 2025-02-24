@@ -32,36 +32,39 @@ BACKUP_FOLDER="/data/local/tmp/kousei_backup"
 BACKUP_FILE="$BACKUP_FOLDER/libil2cpp_$(date +%Y%m%d_%H%M%S).so"
 
 if [ -f "$DEST_FILE" ]; then
+  echo ""
   echo "🔄 Tìm thấy file hiện tại: $DEST_FILE"
 
   mkdir -p "$BACKUP_FOLDER"
   rm -rf $BACKUP_FOLDER/*
 
   cp "$DEST_FILE" "$BACKUP_FILE"
-
+  echo ""
   echo "✅ Đã backup file cũ vào: $BACKUP_FILE"
 else
   echo "ℹ️ Không tìm thấy file cũ, không cần backup."
 fi
 
 TMP_FILE="/data/local/tmp/$FOLDER_NAME"
-
+echo ""
 echo "🔄 Đang tải file mới nhất từ: $ASSET_URL"
 
 curl -L -o "$TMP_FILE" "$ASSET_URL"
 
 if [ $? -eq 0 ]; then
+  echo ""
   echo "✅ Tải file thành công!"
 
   if [ -f "$DEST_FILE" ]; then
     rm "$DEST_FILE"
+    echo ""
     echo "🗑️ Đã xóa file cũ: $DEST_FILE"
   fi
 
   mv "$TMP_FILE" "$DEST_FILE"
 
   chmod 755 "$DEST_FILE"
-
+  echo ""
   echo "✅ File đã được cập nhật thành công tại: $DEST_FILE"
 else
   echo "❌ Lỗi tải file!"
@@ -77,7 +80,7 @@ if [ -z "$LATEST_DIR" ]; then
     description="description=❌! Không tìm thấy thư mục Resources!"
 else
     RESOURCE_PATH="${RESOURCE_DIR}${LATEST_DIR}"
-    description="description=✅! Resources Hiện tại: $LATEST_DIR"
+    description="description=✅ Resources Hiện tại: $LATEST_DIR"
 fi
 
 sed -i "s/^description=.*/$description/g" "$KOUSEI_VN2"

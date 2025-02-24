@@ -9,7 +9,7 @@ if [ -z "$LATEST_DIR" ]; then
     description="description=❌! Không tìm thấy thư mục Resources!"
 else
     RESOURCE_PATH="${RESOURCE_DIR}${LATEST_DIR}"
-    description="description=✅! Resources Hiện tại: $LATEST_DIR"
+    description="description=✅ Resources Hiện tại: $LATEST_DIR"
 fi
 
 sed -i "s/^description=.*/$description/g" "$KOUSEI_VN2"
