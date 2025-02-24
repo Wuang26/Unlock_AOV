@@ -59,17 +59,12 @@ if [ $? -eq 0 ]; then
   echo ""
   echo "✅ Tải file thành công!"
 
-  if [ -f "$DEST_FILE" ]; then
-    rm "$DEST_FILE"
-    echo ""
-    echo "🗑️ Đã xóa file cũ: $DEST_FILE"
-  fi
-
-  mv "$TMP_FILE" "$DEST_FILE"
+  cp -p "$TMP_FILE" "$DEST_FILE"
 
   chmod 755 "$DEST_FILE"
   echo ""
   echo "✅ File đã được cập nhật thành công tại: $DEST_FILE"
+  echo ""
 else
   echo "❌ Lỗi tải file!"
   exit 1
