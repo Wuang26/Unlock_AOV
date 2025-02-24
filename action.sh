@@ -23,6 +23,8 @@ DEST_FOLDER="$GAME_BASE_PATH/$FOLDER_NAME/arm64-v8a"
 
 if [ ! -d "$DEST_FOLDER" ]; then
   echo "❌ Thư mục không tồn tại: $DEST_FOLDER"
+  echo ""
+  echo "❌ Vui lòng kiểm tra lại phiên bản của game"
   exit 1
 fi
 
@@ -43,6 +45,8 @@ if [ -f "$DEST_FILE" ]; then
   echo "✅ Đã backup file cũ vào: $BACKUP_FILE"
 else
   echo "ℹ️ Không tìm thấy file cũ, không cần backup."
+   echo ""
+  echo "❌ Vui lòng kiểm tra lại phiên bản của game"
 fi
 
 TMP_FILE="/data/local/tmp/$FOLDER_NAME"
