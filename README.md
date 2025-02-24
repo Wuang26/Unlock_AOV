@@ -1,5 +1,6 @@
 MODULE UNLOCK AOV SETTINGS
 - Mở khoá 90/120FPS.
+- Mở khoá cam siêu xa
 - Mở khoá xem Profile.
 - Cập nhật theo từng mùa.
   
