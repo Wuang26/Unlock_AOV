@@ -7,7 +7,9 @@ fi
 
 GITHUB_USER="Wuang26"
 GITHUB_REPO="Unlock_AOV"
-
+KOUSEI_VN2="/data/adb/modules/aov_unlock/module.prop"
+RESOURCE_DIR="/data/user/0/com.garena.game.kgvn/files/Resources/"
+LATEST_DIR=$(ls -1t "$RESOURCE_DIR" 2>/dev/null | head -n 1)
 ASSET_URL=$(curl -s "https://api.github.com/repos/$GITHUB_USER/$GITHUB_REPO/releases/latest" | grep "browser_download_url" | cut -d '"' -f 4 | head -n 1)
 
 if [ -z "$ASSET_URL" ]; then
@@ -16,9 +18,7 @@ if [ -z "$ASSET_URL" ]; then
 fi
 
 FOLDER_NAME=$(basename "$ASSET_URL")
-
 GAME_BASE_PATH="/data/user/0/com.garena.game.kgvn/files/Resources"
-
 DEST_FOLDER="$GAME_BASE_PATH/$FOLDER_NAME/arm64-v8a"
 
 if [ ! -d "$DEST_FOLDER" ]; then
@@ -29,7 +29,6 @@ if [ ! -d "$DEST_FOLDER" ]; then
 fi
 
 DEST_FILE="$DEST_FOLDER/libil2cpp.so"
-
 BACKUP_FOLDER="/data/local/tmp/kousei_backup"
 BACKUP_FILE="$BACKUP_FOLDER/libil2cpp_$(date +%Y%m%d_%H%M%S).so"
 
@@ -70,16 +69,11 @@ else
   exit 1
 fi
 
-KOUSEI_VN2="/data/adb/modules/aov_unlock/module.prop"
-
-RESOURCE_DIR="/data/user/0/com.garena.game.kgvn/files/Resources/"
-LATEST_DIR=$(ls -1t "$RESOURCE_DIR" 2>/dev/null | head -n 1)
-
 if [ -z "$LATEST_DIR" ]; then
     description="description=❌! Không tìm thấy thư mục Resources!"
 else
     RESOURCE_PATH="${RESOURCE_DIR}${LATEST_DIR}"
-    description="description=✅ Resources Hiện tại: $LATEST_DIR"
+    description="description=✅ Unlock Settings Liên Quân Mobile\\\n⚙️ Resources Hiện tại: $LATEST_DIR"
 fi
 
 sed -i "s/^description=.*/$description/g" "$KOUSEI_VN2"

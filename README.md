@@ -1,6 +1,8 @@
+https://github.com/Wuang26/Unlock_AOV
+
 MODULE UNLOCK AOV SETTINGS
 - Mở khoá 90/120FPS.
-- Mở khoá camera siêu xa
+- Mở khoá camera siêu xa.
 - Mở khoá xem Profile.
 - Cập nhật theo từng mùa.
   
