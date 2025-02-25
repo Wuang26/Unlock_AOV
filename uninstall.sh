@@ -47,7 +47,7 @@ if [ -f "$DEST_FILE" ]; then
   echo "🗑️ Đã xóa file hiện tại: $DEST_FILE"
 fi
 
-cp "$LATEST_BACKUP" "$DEST_FILE"
+cp -p "$LATEST_BACKUP" "$DEST_FILE"
 
 chmod 755 "$DEST_FILE"
 
