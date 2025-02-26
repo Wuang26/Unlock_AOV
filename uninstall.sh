@@ -1,5 +1,19 @@
 #!/system/bin/sh
+KOUSEI_BACKUP=0
 
+KOUSEI_VN1="/data/user/0/com.garena.game.kgvn/files/Resources"
+KOUSEI_VN2="/data/data/com.garena.game.kgvn/files/Resources"
+KOUSEI_VN3="/data/system/package_cache/"
+
+if [ "$KOUSEI_BACKUP" -ne 1 ]; then
+  echo "Backup mode: $KOUSEI_BACKUP"
+    rm -rf $KOUSEI_VN1
+    rm -rf $KOUSEI_VN2
+    rm -rf $KOUSEI_VN3
+  exit 0
+fi
+
+# Kiểm tra quyền root
 if [ "$(id -u)" != "0" ]; then
   echo "❌ Cần chạy với quyền root!"
   exit 1
@@ -13,7 +27,6 @@ if [ ! -d "$BACKUP_FOLDER" ]; then
 fi
 
 LATEST_BACKUP=$(ls -t "$BACKUP_FOLDER"/libil2cpp_*.so 2>/dev/null | head -n 1)
-
 
 if [ -z "$LATEST_BACKUP" ]; then
   echo "❌ Không tìm thấy file backup!"

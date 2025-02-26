@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/system/bin/sh
 
 KOUSEI_VN2="/data/adb/modules/aov_unlock/module.prop"
 

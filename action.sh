@@ -4,6 +4,7 @@ if [ "$(id -u)" != "0" ]; then
   echo "❌ Cần chạy với quyền root!"
   exit 1
 fi
+KOUSEI_BACKUP=0
 
 GITHUB_USER="Wuang26"
 GITHUB_REPO="Unlock_AOV"
@@ -32,25 +33,39 @@ DEST_FILE="$DEST_FOLDER/libil2cpp.so"
 BACKUP_FOLDER="/data/local/tmp/kousei_backup"
 BACKUP_FILE="$BACKUP_FOLDER/libil2cpp_$(date +%Y%m%d_%H%M%S).so"
 
-if [ -f "$DEST_FILE" ]; then
-  echo ""
-  echo "🔄 Tìm thấy file hiện tại: $DEST_FILE"
+if [ "$KOUSEI_BACKUP" -eq 1 ]; then
+  if [ -f "$DEST_FILE" ]; then
+    echo "Script by Kousei"
+    echo ""
+    echo "🔄 Tìm thấy file hiện tại: $DEST_FILE"
 
-  mkdir -p "$BACKUP_FOLDER"
-  rm -rf $BACKUP_FOLDER/*
+    mkdir -p "$BACKUP_FOLDER"
+    rm -rf "$BACKUP_FOLDER"/*
 
-  cp "$DEST_FILE" "$BACKUP_FILE"
-  echo ""
-  echo "✅ Đã backup file cũ vào: $BACKUP_FILE"
+    cp "$DEST_FILE" "$BACKUP_FILE"
+    echo ""
+    echo "✅ Đã backup file cũ vào: $BACKUP_FILE"
+  else
+    echo "ℹ️ Không tìm thấy file cũ, không cần backup."
+    echo ""
+    echo "❌ Vui lòng kiểm tra lại phiên bản của game"
+  fi
 else
-  echo "ℹ️ Không tìm thấy file cũ, không cần backup."
-   echo ""
-  echo "❌ Vui lòng kiểm tra lại phiên bản của game"
+  echo "Script by Kousei"
+fi
+
+UNINSTALL_SCRIPT="/data/adb/modules/aov_unlock/uninstall.sh"
+if grep -q "KOUSEI_BACKUP=" "$UNINSTALL_SCRIPT"; then
+  sed -i "s/^KOUSEI_BACKUP=.*/KOUSEI_BACKUP=$KOUSEI_BACKUP/g" "$UNINSTALL_SCRIPT"
+else
+  echo ""
 fi
 
 TMP_FILE="/data/local/tmp/$FOLDER_NAME"
 echo ""
 echo "🔄 Đang tải file mới nhất từ: $ASSET_URL"
+echo ""
+echo "🔗 Đang tải xuống..."
 
 curl -L -o "$TMP_FILE" "$ASSET_URL"
 
@@ -73,8 +88,8 @@ if [ -z "$LATEST_DIR" ]; then
     description="description=❌! Không tìm thấy thư mục Resources!"
 else
     RESOURCE_PATH="${RESOURCE_DIR}${LATEST_DIR}"
-    description="description=✅ Unlock Settings Liên Quân Mobile\\\n⚙️ Resources Hiện tại: $LATEST_DIR"
+    description="description=✅ Resources Hiện tại: $LATEST_DIR"
 fi
 
 sed -i "s/^description=.*/$description/g" "$KOUSEI_VN2"
-"Đã xong!"
+echo "✅ Đã xong!"
