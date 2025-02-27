@@ -21,11 +21,28 @@ fi
 FOLDER_NAME=$(basename "$ASSET_URL")
 GAME_BASE_PATH="/data/user/0/com.garena.game.kgvn/files/Resources"
 DEST_FOLDER="$GAME_BASE_PATH/$FOLDER_NAME/arm64-v8a"
+version_resources="version=$FOLDER_NAME"
+SERVICES_SCRIPT="/data/adb/modules/aov_unlock/service.sh"
+
+if grep -q "FOLDER_NAME=" "$SERVICES_SCRIPT"; then
+  sed -i "s/^FOLDER_NAME=.*/FOLDER_NAME=$FOLDER_NAME/g" "$SERVICES_SCRIPT"
+else
+  echo ""
+fi
+sed -i "s/^version=.*/$version_resources/g" "$KOUSEI_VN2"
 
 if [ ! -d "$DEST_FOLDER" ]; then
   echo "❌ Thư mục không tồn tại: $DEST_FOLDER"
   echo ""
-  echo "❌ Vui lòng kiểm tra lại phiên bản của game"
+  echo "❌ Vui lòng kiểm tra lại phiên bản của Module hoặc Game.!"
+  echo ""
+  echo "⏩ Mở trang phát hành module sau 15 giây...!"
+  sleep 15
+  echo ""
+  echo "🔗 Tải xuống Module mới nhất tại:"
+  echo ""
+  echo "https://github.com/Wuang26/Unlock_AOV/releases"
+  am start -a android.intent.action.VIEW -d "https://github.com/Wuang26/Unlock_AOV/releases" >/dev/null 2>&1
   exit 1
 fi
 
@@ -42,13 +59,14 @@ if [ "$KOUSEI_BACKUP" -eq 1 ]; then
     mkdir -p "$BACKUP_FOLDER"
     rm -rf "$BACKUP_FOLDER"/*
 
-    cp "$DEST_FILE" "$BACKUP_FILE"
+    cp -p "$DEST_FILE" "$BACKUP_FILE"
     echo ""
     echo "✅ Đã backup file cũ vào: $BACKUP_FILE"
   else
     echo "ℹ️ Không tìm thấy file cũ, không cần backup."
     echo ""
-    echo "❌ Vui lòng kiểm tra lại phiên bản của game"
+    echo "❌ Vui lòng kiểm tra lại phiên bản của game.!"
+    echo ""
   fi
 else
   echo "Script by Kousei"

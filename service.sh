@@ -1,7 +1,7 @@
 #!/system/bin/sh
-
+FOLDER_NAME=1
+version_resources="version=$FOLDER_NAME"
 KOUSEI_VN2="/data/adb/modules/aov_unlock/module.prop"
-
 RESOURCE_DIR="/data/data/com.garena.game.kgvn/files/Resources/"
 LATEST_DIR=$(ls -1t "$RESOURCE_DIR" 2>/dev/null | head -n 1)
 
@@ -12,4 +12,5 @@ else
     description="description=✅ Resources Hiện tại: $LATEST_DIR"
 fi
 
+sed -i "s/^version=.*/$version_resources/g" "$KOUSEI_VN2"
 sed -i "s/^description=.*/$description/g" "$KOUSEI_VN2"
