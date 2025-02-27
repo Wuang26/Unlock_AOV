@@ -15,4 +15,4 @@ Cách sử dụng:
 - Flash Module và khởi động lại
 - Cách 1: Bấm action
 - Cách 2: Đối với những phiên bản cũ không có phím action:
-  - Hãy chạy file: data/adb/modules/aov_unlock/action.sh với quyền root.
+  - Hãy chạy file: "/data/adb/modules/aov_unlock/action.sh" với quyền root.
