@@ -1,2 +1,1 @@
-REPLACE="
-"
+sh $MODPATH/action.sh
