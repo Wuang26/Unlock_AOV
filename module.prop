@@ -1,6 +1,7 @@
 id=aov_unlock
 name=Unlock AOV Settings
 author=Kousei_VN
-version=V1.0
-versionCode=1
+version=131448064
+versionCode=15712
 description=✅ Unlock settings Liên Quân Mobile.\n👉 Khởi động lại và bấm Action.
+updateJson=https://raw.githubusercontent.com/Wuang26/Unlock_AOV/main/update.json

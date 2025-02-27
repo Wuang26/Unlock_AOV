@@ -1,5 +1,5 @@
 #!/system/bin/sh
-FOLDER_NAME=1
+FOLDER_NAME=131448064
 version_resources="version=$FOLDER_NAME"
 KOUSEI_VN2="/data/adb/modules/aov_unlock/module.prop"
 RESOURCE_DIR="/data/data/com.garena.game.kgvn/files/Resources/"
