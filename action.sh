@@ -83,7 +83,7 @@ TMP_FILE="/data/local/tmp/$FOLDER_NAME"
 echo ""
 echo "🔄 Đang tải file mới nhất từ: $ASSET_URL"
 echo ""
-echo "🔗 Đang tải xuống..."
+echo "🔗 Đang tải xuống, vui lòng đợi..."
 
 curl -L -o "$TMP_FILE" "$ASSET_URL"
 
