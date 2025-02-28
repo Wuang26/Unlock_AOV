@@ -80,6 +80,7 @@ else
 fi
 
 TMP_FILE="/data/local/tmp/$FOLDER_NAME"
+rm -rf $TMP_FILE
 echo ""
 echo "🔄 Đang tải file mới nhất từ: $ASSET_URL"
 echo ""
@@ -110,4 +111,5 @@ else
 fi
 
 sed -i "s/^description=.*/$description/g" "$KOUSEI_VN2"
+rm -rf $TMP_FILE
 echo "✅ Đã xong!"
