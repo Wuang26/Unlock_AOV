@@ -9,4 +9,8 @@
 
 - Date: 25/02/2025
 
-- Update công cụ cần thiết cho module.
+- Module:
+
+- - Update công cụ cần thiết cho module.
+ 
+  - Công cụ không còn phụ thuộc vào system/bin của thiết bị.
