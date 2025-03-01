@@ -15,7 +15,8 @@ ASSET_URL=$(curl -s "https://api.github.com/repos/$GITHUB_USER/$GITHUB_REPO/rele
 
 if [ -z "$ASSET_URL" ]; then
   echo "❌ Không tìm thấy file mới nhất!"
-  echo " ⚠️ Hãy sử dụng Termux, chạy với lệnh như sau:"
+  echo "⏩ Khởi động lại máy nếu bạn Flash module lần đầu tiên!"
+  echo "⚠️ Hãy sử dụng Termux, chạy với lệnh như sau:"
   echo ""
   echo "- Lệnh 1: su"
   echo "- Lệnh 2: chmod +x /data/adb/modules/aov_unlock/action.sh"
