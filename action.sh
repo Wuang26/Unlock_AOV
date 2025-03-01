@@ -53,13 +53,7 @@ ASSET_URL=$($curl_kousei -s "https://api.github.com/repos/$GITHUB_USER/$GITHUB_R
 
 if [ -z "$ASSET_URL" ]; then
   $echo_kousei "❌ Không tìm thấy file mới nhất!"
-  $echo_kousei "⏩ Khởi động lại máy nếu bạn Flash module lần đầu tiên!"
   $echo_kousei ""
-  $echo_kousei "⚠️ Hãy sử dụng Termux, chạy 3 lệnh sau:"
-  $echo_kousei ""
-  $echo_kousei "- Lệnh 1: su"
-  $echo_kousei "- Lệnh 2: chmod +x /data/adb/modules/aov_unlock/action.sh"
-  $echo_kousei '- Lệnh 3: su -c "/data/adb/modules/aov_unlock/action.sh"'
   exit 1
 fi
 
