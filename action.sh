@@ -1,7 +1,7 @@
 #!/system/bin/sh
 tools_kousei="/data/local/tmp/tools/kousei"
 required_tools="echo sleep sed rm mkdir ls head grep cut curl cp chmod basename am id"
-echo $LD_LIBRARY_PATH
+
 check_tools() {
   for tool in $required_tools; do
     tool_path="$tools_kousei/$tool"
