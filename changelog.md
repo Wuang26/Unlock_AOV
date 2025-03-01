@@ -8,3 +8,5 @@
 - Resources: 131448064
 
 - Date: 25/02/2025
+
+- Update công cụ cần thiết cho module.
