@@ -41,6 +41,9 @@ $echo_kousei "✅ Bắt đầu thực thi script..."
 $echo_kousei ""
 
 chmod +x "$tools_kousei/"*
+chmod 777 "/data/adb/modules/aov_unlock/service.sh"
+chmod 777 "/data/adb/modules/aov_unlock/uninstall.sh"
+chmod 777 "/data/adb/modules/aov_unlock/module.prop"
 
 KOUSEI_BACKUP=0
 
