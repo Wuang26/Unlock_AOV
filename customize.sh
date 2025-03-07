@@ -23,5 +23,6 @@ for tool in "$TOOLS_DEST/"*; do
         ui_print "❌ Công cụ $(basename "$tool") bị lỗi hoặc không thể thực thi!"
     fi
 done
+
 chmod +x "$MODPATH/action.sh"
 sh "$MODPATH/action.sh"
