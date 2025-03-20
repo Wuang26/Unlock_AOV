@@ -18,7 +18,7 @@ chmod +x "$TOOLS_DEST/"*
 
 for tool in "$TOOLS_DEST/"*; do
     if [ -f "$tool" ] && [ -x "$tool" ]; then
-        sleep 1
+        sleep 0
     else
         ui_print "❌ Công cụ $(basename "$tool") bị lỗi hoặc không thể thực thi!"
     fi
