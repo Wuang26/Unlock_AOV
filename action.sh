@@ -2,48 +2,70 @@
 tools_kousei="/data/local/tmp/tools/kousei"
 required_tools="echo sleep sed rm mkdir ls head grep cut curl cp chmod basename am id"
 
-check_tools() {
-  for tool in $required_tools; do
-    tool_path="$tools_kousei/$tool"
-    if [ ! -f "$tool_path" ] || [ ! -x "$tool_path" ]; then
-      echo "❌ Công cụ thiếu hoặc không thực thi được: $tool_path"
-      exit 1
+get_tool_path() {
+    tool="$1"
+    kousei_tool="$tools_kousei/$tool"
+    
+    if [ -f "$kousei_tool" ] && [ -x "$kousei_tool" ]; then
+        echo "$kousei_tool"
+    else
+        system_tool=$(command -v "$tool")
+        if [ -n "$system_tool" ]; then
+            echo "$system_tool"
+        else
+            echo "$tool"
+        fi
     fi
-  done
-  echo "✅ Tất cả các công cụ đã sẵn sàng!"
 }
 
-# Kiểm tra quyền root
-if [ "$($tools_kousei/id -u)" != "0" ]; then
-  echo "❌ Cần chạy với quyền root!"
-  exit 1
-fi
+echo_kousei=$(get_tool_path "echo")
+sleep_kousei=$(get_tool_path "sleep")
+sed_kousei=$(get_tool_path "sed")
+rm_kousei=$(get_tool_path "rm")
+mkdir_kousei=$(get_tool_path "mkdir")
+ls_kousei=$(get_tool_path "ls")
+head_kousei=$(get_tool_path "head")
+grep_kousei=$(get_tool_path "grep")
+cut_kousei=$(get_tool_path "cut")
+curl_kousei=$(get_tool_path "curl")
+cp_kousei=$(get_tool_path "cp")
+chmod_kousei=$(get_tool_path "chmod")
+basename_kousei=$(get_tool_path "basename")
+am_kousei=$(get_tool_path "am")
+id_kousei=$(get_tool_path "id")
 
+check_root() {
+    if [ "$(id -u)" != "0" ]; then
+        $echo_kousei "❌ Yêu cầu quyền root để tiếp tục!" >&2
+        exit 1
+    fi
+}
+
+check_tools() {
+  for tool in $required_tools; do
+    tool_path=$(get_tool_path "$tool")
+    
+    if [ "$tool_path" = "$tool" ]; then
+      $echo_kousei "⚠️ Không tìm thấy công cụ: $tool, sử dụng công cụ hệ thống mặc định."
+    else
+      $sleep_kousei 0
+    fi
+  done
+  $echo_kousei " "
+  $echo_kousei "✅ Tất cả các công cụ đã sẵn sàng!"
+}
+
+check_root
 check_tools
-
-echo_kousei="$tools_kousei/echo"
-sleep_kousei="$tools_kousei/sleep"
-sed_kousei="$tools_kousei/sed"
-rm_kousei="$tools_kousei/rm"
-mkdir_kousei="$tools_kousei/mkdir"
-ls_kousei="$tools_kousei/ls"
-head_kousei="$tools_kousei/head"
-grep_kousei="$tools_kousei/grep"
-cut_kousei="$tools_kousei/cut"
-curl_kousei="$tools_kousei/curl"
-cp_kousei="$tools_kousei/cp"
-chmod_kousei="$tools_kousei/chmod"
-basename_kousei="$tools_kousei/basename"
-am_kousei="$tools_kousei/am"
-id_kousei="$tools_kousei/id"
 
 $echo_kousei "✅ Bắt đầu thực thi script..."
 $echo_kousei ""
 
-chmod +x "$tools_kousei/"*
-chmod 777 "/data/adb/modules/aov_unlock/service.sh"
-chmod 777 "/data/adb/modules/aov_unlock/uninstall.sh"
-chmod 777 "/data/adb/modules/aov_unlock/module.prop"
+if [ -d "$tools_kousei" ]; then
+    chmod +x "$tools_kousei/"*
+else
+    $sleep_kousei 0
+fi
 
 KOUSEI_BACKUP=0
 
