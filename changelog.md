@@ -5,6 +5,6 @@
 
 - ABI: arm64-v8a
 
-- Resources: 131448064
+- Resources: 136405864
 
 - Date: 23/03/2025
