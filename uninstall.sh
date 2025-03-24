@@ -7,9 +7,9 @@ KOUSEI_VN3="/data/system/package_cache/"
 
 if [ "$KOUSEI_BACKUP" -ne 1 ]; then
   echo "Backup mode: $KOUSEI_BACKUP"
-    rm -rf $KOUSEI_VN1
-    rm -rf $KOUSEI_VN2
-    rm -rf $KOUSEI_VN3
+    rm -rf $KOUSEI_VN1/*
+    rm -rf $KOUSEI_VN2/*
+    rm -rf $KOUSEI_VN3/*
   exit 0
 fi
 
