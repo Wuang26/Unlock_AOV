@@ -10,11 +10,18 @@ MODULE UNLOCK AOV SETTINGS
   - Tôi không chịu trách nhiệm với các vấn đề khoá tài khoản khi sử dụng module này.
  
 - Thanks Yuri for support.
+- 
 
+- 
 Hướng dẫn sử dụng:
+
 - Đối với người dùng không sử dụng zygisk:
-  - Tải phiên bản Module_No_Zygisk.zip và install. Nếu mùa mới hãy đợi thông báo cập nhật và bấm action.
-- Đối với người dùng zygisk: tải và install phiên bản Module_Zygisk.zip
+  - Tải phiên bản Module_No_Zygisk.zip và install. Nếu khi có mùa mới hãy đợi thông báo cập nhật và bấm action.
+
+- Đối với người dùng zygisk:
+  - Tải và install phiên bản Module_Zygisk.zip
+
+
 - Đối với người dùng không root và có custom recovery như TWRP hay OrangeFox:
 - - Yêu cầu giải mã hoá được bộ nhớ.
   - Tải File có dãy số ở release và đổi tên thành: "libil2cpp.so".
