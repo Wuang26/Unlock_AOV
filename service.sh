@@ -1,9 +1,64 @@
 #!/system/bin/sh
 FOLDER_NAME=131448064
 
-chmod +x "/data/adb/modules/aov_unlock/action.sh"
 tools_kousei="/data/local/tmp/tools/kousei"
-ls_kousei="$tools_kousei/ls"
+required_tools="echo sleep sed rm mkdir ls head grep cut curl cp chmod basename am id chcon install getenforce setenforce awk stat"
+
+get_tool_path() {
+    tool="$1"
+    kousei_tool="$tools_kousei/$tool"
+    
+    if [ -f "$kousei_tool" ] && [ -x "$kousei_tool" ]; then
+        echo "$kousei_tool"
+    else
+        system_tool=$(command -v "$tool")
+        if [ -n "$system_tool" ]; then
+            echo "$system_tool"
+        else
+            echo "$tool"
+        fi
+    fi
+}
+
+stat_kousei=$(get_tool_path "stat")
+awk_kousei=$(get_tool_path "awk")
+setenforce_kousei=$(get_tool_path "setenforce")
+install_kousei=$(get_tool_path "install")
+getenforce_kousei=$(get_tool_path "getenforce")
+chcon_kousei=$(get_tool_path "chcon")
+echo_kousei=$(get_tool_path "echo")
+sleep_kousei=$(get_tool_path "sleep")
+sed_kousei=$(get_tool_path "sed")
+rm_kousei=$(get_tool_path "rm")
+mkdir_kousei=$(get_tool_path "mkdir")
+ls_kousei=$(get_tool_path "ls")
+head_kousei=$(get_tool_path "head")
+grep_kousei=$(get_tool_path "grep")
+cut_kousei=$(get_tool_path "cut")
+curl_kousei=$(get_tool_path "curl")
+cp_kousei=$(get_tool_path "cp")
+chmod_kousei=$(get_tool_path "chmod")
+basename_kousei=$(get_tool_path "basename")
+am_kousei=$(get_tool_path "am")
+id_kousei=$(get_tool_path "id")
+
+check_tools() {
+  for tool in $required_tools; do
+    tool_path=$(get_tool_path "$tool")
+    
+    if [ "$tool_path" = "$tool" ]; then
+      $echo_kousei "⚠️ Không tìm thấy công cụ: $tool, sử dụng công cụ hệ thống mặc định."
+    else
+      $sleep_kousei 0
+    fi
+  done
+  $echo_kousei " "
+  $echo_kousei "✅ Tất cả các công cụ đã sẵn sàng!"
+}
+
+check_tools
+
+$chmod_kousei +x "/data/adb/modules/aov_unlock/action.sh"
 version_resources="version=$FOLDER_NAME"
 KOUSEI_VN2="/data/adb/modules/aov_unlock/module.prop"
 RESOURCE_DIR="/data/data/com.garena.game.kgvn/files/Resources/"
@@ -16,5 +71,5 @@ else
     description="description=✅ Resources Hiện tại: $LATEST_DIR"
 fi
 
-sed -i "s/^version=.*/$version_resources/g" "$KOUSEI_VN2"
-sed -i "s/^description=.*/$description/g" "$KOUSEI_VN2"
+$sed_kousei -i "s/^version=.*/$version_resources/g" "$KOUSEI_VN2"
+$sed_kousei -i "s/^description=.*/$description/g" "$KOUSEI_VN2"

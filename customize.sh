@@ -1,4 +1,5 @@
 #!/system/bin/sh
+[ -z "$MODPATH" ] && MODPATH="/data/adb/modules_update/aov_unlock/"
 TOOLS_SRC="$MODPATH/tools"
 TOOLS_KOUSEI="$MODPATH/tools/kousei"
 TOOLS_DEST="/data/local/tmp/tools/kousei"
@@ -9,7 +10,7 @@ rm -rf "$TOOLS_DEST/"*
 
 cp -af "$TOOLS_SRC/"* "$TOOLS_DEST/"
 
-for tool_name in sleep sed rm mkdir ls id head grep echo cut cp chmod basename; do
+for tool_name in echo sleep sed rm mkdir ls head grep chown touch cut cp chmod basename id chcon install getenforce md5sum setenforce stat; do
     cp -af "$TOOLS_KOUSEI" "$TOOLS_DEST/$tool_name"
     chmod +x "$TOOLS_DEST/$tool_name"
 done
