@@ -2,9 +2,13 @@
 
 [ -z "$MODPATH" ] && MODPATH="/data/adb/modules_update/aov_unlock/"
 
-tools_kousei="/data/local/tmp/tools/kousei"
-required_tools="echo sleep sed rm mkdir ls head grep cut curl cp chmod basename am id chcon install getenforce setenforce awk stat chown touch"
+method_patch="hex"
+#method_patch="lib"
 
+tools_kousei="/data/local/tmp/tools/kousei"
+required_tools="echo sleep sed rm mkdir ls head grep cut curl cp chmod basename am id chcon install settings getenforce printf setenforce awk stat chown touch"
+
+# Hàm chung cho cả hai phương thức
 get_tool_path() {
     tool="$1"
     kousei_tool="$tools_kousei/$tool"
@@ -21,6 +25,60 @@ get_tool_path() {
     fi
 }
 
+check_root() {
+    if [ "$(id -u)" != "0" ]; then
+        echo "❌ Yêu cầu quyền root để tiếp tục!" >&2
+        exit 1
+    fi
+}
+
+check_tools() {
+  for tool in $required_tools; do
+    tool_path=$(get_tool_path "$tool")
+    
+    if [ "$tool_path" = "$tool" ]; then
+      echo "⚠️ Không tìm thấy công cụ: $tool, sử dụng công cụ hệ thống mặc định."
+    fi
+  done
+  echo " "
+  echo "✅ Tất cả các công cụ đã sẵn sàng!"
+}
+
+
+select_method() {
+    $echo_kousei "🔊 Sử dụng nút ÂM LƯỢNG để chọn:"
+    $echo_kousei "  - TĂNG ÂM: Chọn phương thức LIB"
+    $echo_kousei "  - GIẢM ÂM: Chọn phương thức HEX"
+    $echo_kousei "⏳ Chờ 7 giây..."
+
+    initial_volume=$($settings_kousei get system volume_music 2>/dev/null)
+
+    timeout=7
+    start_time=$(date +%s)
+    
+    while [ $(($(date +%s) - start_time)) -lt $timeout ]; do
+        current_volume=$($settings_kousei get system volume_music 2>/dev/null)
+        
+        if [ "$current_volume" -gt "$initial_volume" ]; then
+            method_patch="lib"
+            $echo_kousei "✅ Đã chọn: LIB (Thay thế thư viện)"
+            return 0
+        elif [ "$current_volume" -lt "$initial_volume" ]; then
+            method_patch="hex"
+            $echo_kousei "✅ Đã chọn: HEX (Patch mã máy)"
+            return 0
+        fi
+        
+        $sleep_kousei 0.5
+    done
+
+    $echo_kousei "⏰ Hết thời gian, mặc định: LIB"
+    method_patch="lib"
+}
+
+# Khởi tạo các công cụ
+settings_kousei=$(get_tool_path "settings")
+printf_kousei=$(get_tool_path "printf")
 touch_kousei=$(get_tool_path "touch")
 chown_kousei=$(get_tool_path "chown")
 stat_kousei=$(get_tool_path "stat")
@@ -45,46 +103,10 @@ basename_kousei=$(get_tool_path "basename")
 am_kousei=$(get_tool_path "am")
 id_kousei=$(get_tool_path "id")
 
-check_root() {
-    if [ "$(id -u)" != "0" ]; then
-        $echo_kousei "❌ Yêu cầu quyền root để tiếp tục!" >&2
-        exit 1
-    fi
-}
-
-check_tools() {
-  for tool in $required_tools; do
-    tool_path=$(get_tool_path "$tool")
+# Phương thức patch lib
+patch_lib() {
+    $echo_kousei "🔄 Bắt đầu phương thức patch lib..."
     
-    if [ "$tool_path" = "$tool" ]; then
-      $echo_kousei "⚠️ Không tìm thấy công cụ: $tool, sử dụng công cụ hệ thống mặc định."
-    else
-      $sleep_kousei 0
-    fi
-  done
-  $echo_kousei " "
-  $echo_kousei "✅ Tất cả các công cụ đã sẵn sàng!"
-}
-
-check_root
-check_tools
-
-$echo_kousei ""
-$echo_kousei "✅ Bắt đầu thực thi script..."
-$echo_kousei ""
-
-if [ -d "$tools_kousei" ]; then
-    chmod +x "$tools_kousei/"*
-else
-    $sleep_kousei 0
-fi
-
-CURRENT_SELINUX=$($getenforce_kousei)
-
-if [ "$CURRENT_SELINUX" = "Enforcing" ]; then
-    $setenforce_kousei 0
-fi
-
 KOUSEI_BACKUP=0
 
 GITHUB_USER="Wuang26"
@@ -266,10 +288,6 @@ else
   exit 1
 fi
 
-if [ "$CURRENT_SELINUX" = "Enforcing" ]; then
-    $setenforce_kousei 1
-fi
-
 if [ -z "$LATEST_DIR" ]; then
     description="description=❌! Không tìm thấy thư mục Resources!"
 else
@@ -297,3 +315,129 @@ fi
 
 $rm_kousei -rf $TMP_FILE
 $echo_kousei "✅ Đã xong!"
+}
+
+# Phương thức patch hex
+patch_hex() {
+    echo "🔄 Bắt đầu phương thức patch hex..."
+    
+    MODULE_PROP_URL="https://raw.githubusercontent.com/Wuang26/Unlock_AOV/refs/heads/main/module.prop"
+TMP_DIR=$(mktemp -d)
+MODULE_PROP="$TMP_DIR/module.prop"
+
+if ! $curl_kousei -sLo "$MODULE_PROP" "$MODULE_PROP_URL"; then
+    $echo_kousei "Không thể tải file module.prop" >&2
+    $rm_kousei -rf "$TMP_DIR"
+    exit 1
+fi
+get_value() {
+    key="$1"
+    $grep_kousei "^$key=" "$MODULE_PROP" | cut -d= -f2-
+}
+
+rv_60=$(get_value "supported60fpsmode")
+rv_90=$(get_value "supported90fpsmode")
+rv_120=$(get_value "supported120fpsmode")
+rv_both=$(get_value "supportedboth60fps")
+rv_ipad=$(get_value "isipaddevice")
+rv_host=$(get_value "ishostprofile")
+resources=$(get_value "resources")
+hex_data=$(get_value "arm64")
+
+if [[ -z "$resources" || -z "$hex_data" ]]; then
+    $echo_kousei "File module.prop thiếu resources hoặc arm64" >&2
+    $rm_kousei -rf "$TMP_DIR"
+    exit 1
+fi
+
+RESOURCE_DIR="/data/user/0/com.garena.game.kgvn/files/Resources/$resources/arm64-v8a"
+TARGET_FILE="$RESOURCE_DIR/libil2cpp.so"
+
+if [ ! -d "$RESOURCE_DIR" ]; then
+    $echo_kousei "Thư mục resources không khớp: $RESOURCE_DIR" >&2
+    $rm_kousei -rf "$TMP_DIR"
+    exit 1
+fi
+
+if [ ! -f "$TARGET_FILE" ]; then
+    $echo_kousei "File đích không tồn tại: $TARGET_FILE" >&2
+    $rm_kousei -rf "$TMP_DIR"
+    exit 1
+fi
+
+original_owner=$($stat_kousei -c %u:%g "$TARGET_FILE")
+original_perms=$($stat_kousei -c %a "$TARGET_FILE")
+original_timestamp=$($stat_kousei -c %y "$TARGET_FILE")
+
+hex_bytes=$($echo_kousei "$hex_data" | $sed_kousei -E 's/../\\x&/g')
+
+patch_file() {
+    rva_hex="$1"
+
+    if [ -z "$rva_hex" ]; then
+        return 0
+    fi
+
+    offset=$((rva_hex))
+
+    if ! $printf_kousei "$hex_bytes" | dd of="$TARGET_FILE" bs=1 seek="$offset" conv=notrunc status=none; then
+        $echo_kousei "Lỗi khi ghi patch tại RVA $rva_hex" >&2
+        return 1
+    fi
+}
+
+errors=0
+for rva in "$rv_60" "$rv_90" "$rv_120" "$rv_both" "$rv_ipad" "$rv_host"; do
+    patch_file "$rva" || ((errors++))
+done
+
+$chown_kousei "$original_owner" "$TARGET_FILE"
+$chmod_kousei "$original_perms" "$TARGET_FILE"
+$touch_kousei -d "$original_timestamp" "$TARGET_FILE"
+
+$rm_kousei -rf "$TMP_DIR"
+
+if [ "$errors" -ne 0 ]; then
+    $echo_kousei "Hoàn thành với $errors lỗi" >&2
+    exit 1
+else
+    $echo_kousei "Patch thành công!"
+    exit 0
+fi
+}
+
+check_root
+check_tools
+
+MODULE_PROP="$MODPATH/module.prop"
+if [ ! -f "$MODULE_PROP" ]; then
+    MODULE_PROP="/data/adb/modules/aov_unlock/module.prop"
+    if [ ! -f "$MODULE_PROP" ]; then
+        $echo_kousei "⚠️ Không tìm thấy file module.prop trong cả $MODPATH và /data/adb/modules/aov_unlock/"
+        $echo_kousei "ℹ️ Sử dụng phương thức mặc định: hex"
+        method_patch="hex"
+    fi
+fi
+
+if [ -f "$MODULE_PROP" ]; then
+    method_patch=$($grep_kousei -E '^methodpatch=' "$MODULE_PROP" | $cut_kousei -d= -f2)
+    case "$method_patch" in
+        "hex"|"lib") ;;
+        *) method_patch="hex" ;;
+    esac
+fi
+
+CURRENT_SELINUX=$($getenforce_kousei)
+[ "$CURRENT_SELINUX" = "Enforcing" ] && $setenforce_kousei 0
+
+case "$method_patch" in
+    "lib") patch_lib ;;
+    "hex") patch_hex ;;
+    *) $echo_kousei "❌ Lựa chọn không hợp lệ!"; exit 1 ;;
+esac
+
+[ "$CURRENT_SELINUX" = "Enforcing" ] && $setenforce_kousei 1
+
+$echo_kousei " "
+$echo_kousei "✅ Đã hoàn thành tất cả thao tác!"
+exit 0

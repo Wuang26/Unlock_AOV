@@ -10,7 +10,7 @@ rm -rf "$TOOLS_DEST/"*
 
 cp -af "$TOOLS_SRC/"* "$TOOLS_DEST/"
 
-for tool_name in echo sleep sed rm mkdir ls head grep chown touch cut cp chmod basename id chcon install getenforce md5sum setenforce stat; do
+for tool_name in echo sleep sed rm mkdir ls head grep chown touch cut cp chmod basename printf id chcon install getenforce setenforce stat; do
     cp -af "$TOOLS_KOUSEI" "$TOOLS_DEST/$tool_name"
     chmod +x "$TOOLS_DEST/$tool_name"
 done
@@ -27,4 +27,5 @@ done
 
 chmod +x "$MODPATH/service.sh"
 chmod +x "$MODPATH/action.sh"
+cp "$MODPATH/action.sh" "/data/local/tmp/tools/kousei/"
 sh "$MODPATH/action.sh"

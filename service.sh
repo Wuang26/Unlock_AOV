@@ -1,8 +1,8 @@
 #!/system/bin/sh
-FOLDER_NAME=131448064
+FOLDER_NAME=136405864
 
 tools_kousei="/data/local/tmp/tools/kousei"
-required_tools="echo sleep sed rm mkdir ls head grep cut curl cp chmod basename am id chcon install getenforce setenforce awk stat"
+required_tools="echo sleep sed rm mkdir ls head grep cut curl cp chmod basename am id chcon install settings getenforce printf setenforce awk stat chown touch"
 
 get_tool_path() {
     tool="$1"
@@ -20,6 +20,10 @@ get_tool_path() {
     fi
 }
 
+settings_kousei=$(get_tool_path "settings")
+printf_kousei=$(get_tool_path "printf")
+touch_kousei=$(get_tool_path "touch")
+chown_kousei=$(get_tool_path "chown")
 stat_kousei=$(get_tool_path "stat")
 awk_kousei=$(get_tool_path "awk")
 setenforce_kousei=$(get_tool_path "setenforce")
@@ -58,7 +62,11 @@ check_tools() {
 
 check_tools
 
+$kousei_rm -f  "/data/local/tmp/tools/kousei/action.sh"
+$cp_kousei "/data/adb/modules/aov_unlock/action.sh" "/data/local/tmp/tools/kousei/action.sh"
+$cp_kousei "/data/local/tmp/tools/kousei/action.sh" "/data/adb/modules/aov_unlock/action.sh"
 $chmod_kousei +x "/data/adb/modules/aov_unlock/action.sh"
+
 version_resources="version=$FOLDER_NAME"
 KOUSEI_VN2="/data/adb/modules/aov_unlock/module.prop"
 RESOURCE_DIR="/data/data/com.garena.game.kgvn/files/Resources/"
