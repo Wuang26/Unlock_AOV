@@ -4,7 +4,16 @@
 
 method_patch="hex"
 #method_patch="lib"
-
+RESOURCE_VER="/data/user/0/com.garena.game.kgvn/files/Resources/"
+KOUSEI_VN2="/data/adb/modules/aov_unlock/module.prop"
+KOUSEI_VN2_DIR="$MODPATH/module.prop"
+KOUSEI_VN2_UP="/data/adb/modules_update/aov_unlock/module.prop"
+SERVICES_SCRIPT_UP="/data/adb/modules_update/aov_unlock/service.sh"
+SERVICES_SCRIPT_DIR="$MODPATH/service.sh"
+SERVICES_SCRIPT="/data/adb/modules/aov_unlock/service.sh"
+UNINSTALL_SCRIPT_UP="/data/adb/modules_update/aov_unlock/uninstall.sh"
+UNINSTALL_SCRIPT_DIR="$MODPATH/uninstall.sh"
+UNINSTALL_SCRIPT="/data/adb/modules/aov_unlock/uninstall.sh"
 tools_kousei="/data/local/tmp/tools/kousei"
 required_tools="echo sleep sed rm mkdir ls head grep cut curl cp chmod basename am id chcon install getenforce printf setenforce awk stat chown getevent touch"
 
@@ -44,6 +53,47 @@ check_tools() {
   echo "✅ Tất cả các công cụ đã sẵn sàng!"
 }
 
+update_module_prop() {
+    local version_resources="$1"
+    local description="$2"
+    local method_patch="$3"
+
+    if $grep_kousei -q "version=" "$KOUSEI_VN2_DIR" 2>/dev/null; then
+        $sed_kousei -i "s/^version=.*/$version_resources/g" "$KOUSEI_VN2_DIR"
+    fi
+
+    if $grep_kousei -q "version=" "$KOUSEI_VN2_UP" 2>/dev/null; then
+        $sed_kousei -i "s/^version=.*/$version_resources/g" "$KOUSEI_VN2_UP"
+    fi
+
+    if $grep_kousei -q "version=" "$KOUSEI_VN2" 2>/dev/null; then
+        $sed_kousei -i "s/^version=.*/$version_resources/g" "$KOUSEI_VN2"
+    fi
+
+    if $grep_kousei -q "description=" "$KOUSEI_VN2_DIR" 2>/dev/null; then
+        $sed_kousei -i "s/^description=.*/$description/g" "$KOUSEI_VN2_DIR"
+    fi
+
+    if $grep_kousei -q "description=" "$KOUSEI_VN2_UP" 2>/dev/null; then
+        $sed_kousei -i "s/^description=.*/$description/g" "$KOUSEI_VN2_UP"
+    fi
+
+    if $grep_kousei -q "description=" "$KOUSEI_VN2" 2>/dev/null; then
+        $sed_kousei -i "s/^description=.*/$description/g" "$KOUSEI_VN2"
+    fi
+
+    if $grep_kousei -q "methodpatch=" "$KOUSEI_VN2_DIR" 2>/dev/null; then
+        $sed_kousei -i "s/^methodpatch=.*/methodpatch=$method_patch/g" "$KOUSEI_VN2_DIR"
+    fi
+
+    if $grep_kousei -q "methodpatch=" "$KOUSEI_VN2_UP" 2>/dev/null; then
+        $sed_kousei -i "s/^methodpatch=.*/methodpatch=$method_patch/g" "$KOUSEI_VN2_UP"
+    fi
+
+    if $grep_kousei -q "methodpatch=" "$KOUSEI_VN2" 2>/dev/null; then
+        $sed_kousei -i "s/^methodpatch=.*/methodpatch=$method_patch/g" "$KOUSEI_VN2"
+    fi
+}
 
 select_method() {
     $echo_kousei "🔊 Sử dụng nút ÂM LƯỢNG để chọn:"
@@ -141,12 +191,7 @@ KOUSEI_BACKUP=0
 
 GITHUB_USER="Wuang26"
 GITHUB_REPO="Unlock_AOV"
-KOUSEI_VN2="/data/adb/modules/aov_unlock/module.prop"
-KOUSEI_VN2_DIR="$MODPATH/module.prop"
-KOUSEI_VN2_UP="/data/adb/modules_update/aov_unlock/module.prop"
-
-RESOURCE_DIR="/data/user/0/com.garena.game.kgvn/files/Resources/"
-LATEST_DIR=$($ls_kousei -1t "$RESOURCE_DIR" 2>/dev/null | $head_kousei -n 1)
+LATEST_DIR=$($ls_kousei -1t "$RESOURCE_VER" 2>/dev/null | $head_kousei -n 1)
 ASSET_URL=$($curl_kousei -s "https://api.github.com/repos/$GITHUB_USER/$GITHUB_REPO/releases/latest" | $grep_kousei "browser_download_url" | $cut_kousei -d '"' -f 4 | $head_kousei -n 1)
 
 if [ -z "$ASSET_URL" ]; then
@@ -159,9 +204,6 @@ FOLDER_NAME=$($basename_kousei "$ASSET_URL")
 GAME_BASE_PATH="/data/user/0/com.garena.game.kgvn/files/Resources"
 DEST_FOLDER="$GAME_BASE_PATH/$FOLDER_NAME/arm64-v8a"
 version_resources="version=$FOLDER_NAME"
-SERVICES_SCRIPT_UP="/data/adb/modules_update/aov_unlock/service.sh"
-SERVICES_SCRIPT_DIR="$MODPATH/service.sh"
-SERVICES_SCRIPT="/data/adb/modules/aov_unlock/service.sh"
 
 if $grep_kousei -q "FOLDER_NAME=" "$SERVICES_SCRIPT_UP" 2>/dev/null; then
   $sed_kousei -i "s/^FOLDER_NAME=.*/FOLDER_NAME=$FOLDER_NAME/g" "$SERVICES_SCRIPT_UP"
@@ -177,24 +219,6 @@ fi
 
 if $grep_kousei -q "FOLDER_NAME=" "$SERVICES_SCRIPT" 2>/dev/null; then
   $sed_kousei -i "s/^FOLDER_NAME=.*/FOLDER_NAME=$FOLDER_NAME/g" "$SERVICES_SCRIPT"
-else
-  $sleep_kousei 0
-fi
-
-if $grep_kousei -q "version=" "$KOUSEI_VN2_DIR" 2>/dev/null; then
-  $sed_kousei -i "s/^version=.*/$version_resources/g" "$KOUSEI_VN2_DIR"
-else
-  $echo_kousei ""
-fi
-
-if $grep_kousei -q "version=" "$KOUSEI_VN2_UP" 2>/dev/null; then
-  $sed_kousei -i "s/^version=.*/$version_resources/g" "$KOUSEI_VN2_UP"
-else
-  $sleep_kousei 0
-fi
-
-if $grep_kousei -q "version=" "$KOUSEI_VN2" 2>/dev/null; then
-  $sed_kousei -i "s/^version=.*/$version_resources/g" "$KOUSEI_VN2"
 else
   $sleep_kousei 0
 fi
@@ -255,9 +279,6 @@ else
   $echo_kousei "========================================"
 fi
 
-UNINSTALL_SCRIPT_UP="/data/adb/modules_update/aov_unlock/uninstall.sh"
-UNINSTALL_SCRIPT_DIR="$MODPATH/uninstall.sh"
-UNINSTALL_SCRIPT="/data/adb/modules/aov_unlock/uninstall.sh"
 if $grep_kousei -q "KOUSEI_BACKUP=" "$UNINSTALL_SCRIPT" 2>/dev/null; then
   $sed_kousei -i "s/^KOUSEI_BACKUP=.*/KOUSEI_BACKUP=$KOUSEI_BACKUP/g" "$UNINSTALL_SCRIPT"
 else
@@ -321,27 +342,11 @@ fi
 if [ -z "$LATEST_DIR" ]; then
     description="description=❌! Không tìm thấy thư mục Resources!"
 else
-    RESOURCE_PATH="${RESOURCE_DIR}${LATEST_DIR}"
+    RESOURCE_PATH="${RESOURCE_VER}${LATEST_DIR}"
     description="description=✅ Resources Hiện tại: $LATEST_DIR"
 fi
 
-if $grep_kousei -q "description=" "$KOUSEI_VN2_DIR" 2>/dev/null; then
-  $sed_kousei -i "s/^description=.*/$description/g" "$KOUSEI_VN2_DIR"
-else
-  $sleep_kousei 0
-fi
-
-if $grep_kousei -q "description=" "$KOUSEI_VN2_UP" 2>/dev/null; then
-  $sed_kousei -i "s/^description=.*/$description/g" "$KOUSEI_VN2_UP"
-else
-  $sleep_kousei 0
-fi
-
-if $grep_kousei -q "description=" "$KOUSEI_VN2" 2>/dev/null; then
-  $sed_kousei -i "s/^description=.*/$description/g" "$KOUSEI_VN2"
-else
-  $sleep_kousei 0
-fi
+update_module_prop "$version_resources" "$description" "lib"
 
 $rm_kousei -rf $TMP_FILE
 $echo_kousei "✅ Đã xong!"
@@ -350,7 +355,7 @@ $echo_kousei "✅ Đã xong!"
 # Phương thức patch hex
 patch_hex() {
     $echo_kousei "🔵 Script by Kousei"
-  $echo_kousei "========================================"
+    $echo_kousei "========================================"
     $echo_kousei " "
     $echo_kousei "🔄 Bắt đầu phương thức patch hex..."
     
@@ -385,6 +390,7 @@ if [[ -z "$resources" || -z "$hex_data" ]]; then
 fi
 
 RESOURCE_DIR="/data/user/0/com.garena.game.kgvn/files/Resources/$resources/arm64-v8a"
+LATEST_DIR=$($ls_kousei -1t "$RESOURCE_VER" 2>/dev/null | $head_kousei -n 1)
 TARGET_FILE="$RESOURCE_DIR/libil2cpp.so"
 
 if [ ! -d "$RESOURCE_DIR" ]; then
@@ -441,8 +447,36 @@ if [ "$errors" -ne 0 ]; then
 else
     $echo_kousei " "
     $echo_kousei "✅ Patch thành công!"
-    exit 0
 fi
+
+version_resources="$resources"
+
+if $grep_kousei -q "FOLDER_NAME=" "$SERVICES_SCRIPT_UP" 2>/dev/null; then
+  $sed_kousei -i "s/^FOLDER_NAME=.*/FOLDER_NAME=$FOLDER_NAME/g" "$SERVICES_SCRIPT_UP"
+else
+  $sleep_kousei 0
+fi
+
+if $grep_kousei -q "FOLDER_NAME=" "$SERVICES_SCRIPT_DIR" 2>/dev/null; then
+  $sed_kousei -i "s/^FOLDER_NAME=.*/FOLDER_NAME=$FOLDER_NAME/g" "$SERVICES_SCRIPT_DIR"
+else
+  $sleep_kousei 0
+fi
+
+if $grep_kousei -q "FOLDER_NAME=" "$SERVICES_SCRIPT" 2>/dev/null; then
+  $sed_kousei -i "s/^FOLDER_NAME=.*/FOLDER_NAME=$FOLDER_NAME/g" "$SERVICES_SCRIPT"
+else
+  $sleep_kousei 0
+fi
+
+if [ -z "$LATEST_DIR" ]; then
+    description="description=❌! Không tìm thấy thư mục Resources!"
+else
+    RESOURCE_PATH="${RESOURCE_VER}${LATEST_DIR}"
+    description="description=✅ Resources Hiện tại: $LATEST_DIR"
+fi
+
+update_module_prop "$version_resources" "$description" "hex"
 }
 
 check_root

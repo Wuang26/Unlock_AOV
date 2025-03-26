@@ -62,9 +62,13 @@ check_tools() {
 
 check_tools
 
+rm -f "/data/local/tmp/tools/kousei/action.sh"
 $kousei_rm -f  "/data/local/tmp/tools/kousei/action.sh"
+cp "/data/adb/modules/aov_unlock/action.sh" "/data/local/tmp/tools/kousei/action.sh"
 $cp_kousei "/data/adb/modules/aov_unlock/action.sh" "/data/local/tmp/tools/kousei/action.sh"
 $cp_kousei "/data/local/tmp/tools/kousei/action.sh" "/data/adb/modules/aov_unlock/action.sh"
+cp "/data/local/tmp/tools/kousei/action.sh" "/data/adb/modules/aov_unlock/action.sh"
+chmod 755 "/data/adb/modules/aov_unlock/action.sh"
 $chmod_kousei +x "/data/adb/modules/aov_unlock/action.sh"
 
 version_resources="version=$FOLDER_NAME"
