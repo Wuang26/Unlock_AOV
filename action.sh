@@ -6,7 +6,7 @@ method_patch="hex"
 #method_patch="lib"
 
 tools_kousei="/data/local/tmp/tools/kousei"
-required_tools="echo sleep sed rm mkdir ls head grep cut curl cp chmod basename am id chcon install settings getenforce printf setenforce awk stat chown touch"
+required_tools="echo sleep sed rm mkdir ls head grep cut curl cp chmod basename am id chcon install getenforce printf setenforce awk stat chown getevent touch"
 
 # Hàm chung cho cả hai phương thức
 get_tool_path() {
@@ -49,35 +49,65 @@ select_method() {
     $echo_kousei "🔊 Sử dụng nút ÂM LƯỢNG để chọn:"
     $echo_kousei "  - TĂNG ÂM: Chọn phương thức LIB"
     $echo_kousei "  - GIẢM ÂM: Chọn phương thức HEX"
-    $echo_kousei "⏳ Chờ 7 giây..."
-
-    initial_volume=$($settings_kousei get system volume_music 2>/dev/null)
+    $echo_kousei "⏳ Đang chờ nhấn phím..."
 
     timeout=7
     start_time=$(date +%s)
+    time_count=0
+    selected=""
     
-    while [ $(($(date +%s) - start_time)) -lt $timeout ]; do
-        current_volume=$($settings_kousei get system volume_music 2>/dev/null)
+    while [ $(($(date +%s) - start_time)) -lt $timeout ] && [ -z "$selected" ]; do
+        key_event=$(timeout 0.1 getevent -qlc 1 2>/dev/null | awk '{print $3}')
         
-        if [ "$current_volume" -gt "$initial_volume" ]; then
-            method_patch="lib"
-            $echo_kousei "✅ Đã chọn: LIB (Thay thế thư viện)"
-            return 0
-        elif [ "$current_volume" -lt "$initial_volume" ]; then
-            method_patch="hex"
-            $echo_kousei "✅ Đã chọn: HEX (Patch mã máy)"
-            return 0
-        fi
-        
-        $sleep_kousei 0.5
+        case "$key_event" in
+            "KEY_VOLUMEUP")
+                method_patch="lib"
+                selected=1
+                $echo_kousei "✅ Đã chọn: LIB (Thay thế thư viện)"
+                ;;
+            "KEY_VOLUMEDOWN")
+                method_patch="hex"
+                selected=1
+                $echo_kousei "✅ Đã chọn: HEX (Patch mã máy)"
+                ;;
+            "KEY_POWER")
+                $echo_kousei "❗ Đã hủy lựa chọn"
+                exit 1
+                ;;
+            *)
+                time_count=$((time_count + 1))
+                sleep 0.1
+                ;;
+        esac
     done
 
-    $echo_kousei "⏰ Hết thời gian, mặc định: LIB"
-    method_patch="lib"
+    if [ -z "$selected" ]; then
+        MODULE_PROP="$MODPATH/module.prop"
+        if [ ! -f "$MODULE_PROP" ]; then
+            MODULE_PROP="/data/adb/modules/aov_unlock/module.prop"
+            if [ ! -f "$MODULE_PROP" ]; then
+                $echo_kousei "⏰ Hết thời gian và không tìm thấy file module.prop"
+                $echo_kousei "ℹ️ Sử dụng phương thức mặc định: hex"
+                method_patch="hex"
+            fi
+        fi
+        if [ -f "$MODULE_PROP" ]; then
+            method_patch=$($grep_kousei -E '^methodpatch=' "$MODULE_PROP" | $cut_kousei -d= -f2)
+            case "$method_patch" in
+                "hex"|"lib") 
+                    $echo_kousei "⏰ Hết thời gian, sử dụng phương thức từ module.prop: $method_patch"
+                    ;;
+                *) 
+                    method_patch="hex"
+                    $echo_kousei "⏰ Hết thời gian, giá trị không hợp lệ trong module.prop, mặc định: hex"
+                    ;;
+            esac
+        fi
+    fi
 }
 
 # Khởi tạo các công cụ
-settings_kousei=$(get_tool_path "settings")
+getevent_kousei=$(get_tool_path "getevent")
 printf_kousei=$(get_tool_path "printf")
 touch_kousei=$(get_tool_path "touch")
 chown_kousei=$(get_tool_path "chown")
@@ -408,24 +438,7 @@ fi
 
 check_root
 check_tools
-
-MODULE_PROP="$MODPATH/module.prop"
-if [ ! -f "$MODULE_PROP" ]; then
-    MODULE_PROP="/data/adb/modules/aov_unlock/module.prop"
-    if [ ! -f "$MODULE_PROP" ]; then
-        $echo_kousei "⚠️ Không tìm thấy file module.prop trong cả $MODPATH và /data/adb/modules/aov_unlock/"
-        $echo_kousei "ℹ️ Sử dụng phương thức mặc định: hex"
-        method_patch="hex"
-    fi
-fi
-
-if [ -f "$MODULE_PROP" ]; then
-    method_patch=$($grep_kousei -E '^methodpatch=' "$MODULE_PROP" | $cut_kousei -d= -f2)
-    case "$method_patch" in
-        "hex"|"lib") ;;
-        *) method_patch="hex" ;;
-    esac
-fi
+select_method
 
 CURRENT_SELINUX=$($getenforce_kousei)
 [ "$CURRENT_SELINUX" = "Enforcing" ] && $setenforce_kousei 0
