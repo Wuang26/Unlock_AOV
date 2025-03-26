@@ -57,7 +57,7 @@ select_method() {
     selected=""
     
     while [ $(($(date +%s) - start_time)) -lt $timeout ] && [ -z "$selected" ]; do
-        key_event=$(timeout 0.1 getevent -qlc 1 2>/dev/null | awk '{print $3}')
+        key_event=$(timeout 0.1 $getevent_kousei -qlc 1 2>/dev/null | $awk_kousei '{print $3}')
         
         case "$key_event" in
             "KEY_VOLUMEUP")
@@ -349,7 +349,10 @@ $echo_kousei "✅ Đã xong!"
 
 # Phương thức patch hex
 patch_hex() {
-    echo "🔄 Bắt đầu phương thức patch hex..."
+    $echo_kousei "🔵 Script by Kousei"
+  $echo_kousei "========================================"
+    $echo_kousei " "
+    $echo_kousei "🔄 Bắt đầu phương thức patch hex..."
     
     MODULE_PROP_URL="https://raw.githubusercontent.com/Wuang26/Unlock_AOV/refs/heads/main/module.prop"
 TMP_DIR=$(mktemp -d)
@@ -375,7 +378,8 @@ resources=$(get_value "resources")
 hex_data=$(get_value "arm64")
 
 if [[ -z "$resources" || -z "$hex_data" ]]; then
-    $echo_kousei "File module.prop thiếu resources hoặc arm64" >&2
+    $echo_kousei " "
+    $echo_kousei "❌ File module.prop thiếu resources hoặc arm64" >&2
     $rm_kousei -rf "$TMP_DIR"
     exit 1
 fi
@@ -384,13 +388,15 @@ RESOURCE_DIR="/data/user/0/com.garena.game.kgvn/files/Resources/$resources/arm64
 TARGET_FILE="$RESOURCE_DIR/libil2cpp.so"
 
 if [ ! -d "$RESOURCE_DIR" ]; then
-    $echo_kousei "Thư mục resources không khớp: $RESOURCE_DIR" >&2
+    $echo_kousei " "
+    $echo_kousei "❌ Thư mục resources không khớp: $RESOURCE_DIR" >&2
     $rm_kousei -rf "$TMP_DIR"
     exit 1
 fi
 
 if [ ! -f "$TARGET_FILE" ]; then
-    $echo_kousei "File đích không tồn tại: $TARGET_FILE" >&2
+    $echo_kousei " "
+    $echo_kousei "❌ File đích không tồn tại: $TARGET_FILE" >&2
     $rm_kousei -rf "$TMP_DIR"
     exit 1
 fi
@@ -411,7 +417,8 @@ patch_file() {
     offset=$((rva_hex))
 
     if ! $printf_kousei "$hex_bytes" | dd of="$TARGET_FILE" bs=1 seek="$offset" conv=notrunc status=none; then
-        $echo_kousei "Lỗi khi ghi patch tại RVA $rva_hex" >&2
+        $echo_kousei " "
+        $echo_kousei "❌ Lỗi khi ghi patch tại RVA $rva_hex" >&2
         return 1
     fi
 }
@@ -428,10 +435,12 @@ $touch_kousei -d "$original_timestamp" "$TARGET_FILE"
 $rm_kousei -rf "$TMP_DIR"
 
 if [ "$errors" -ne 0 ]; then
-    $echo_kousei "Hoàn thành với $errors lỗi" >&2
+    $echo_kousei " "
+    $echo_kousei "⚠️ Hoàn thành với $errors lỗi" >&2
     exit 1
 else
-    $echo_kousei "Patch thành công!"
+    $echo_kousei " "
+    $echo_kousei "✅ Patch thành công!"
     exit 0
 fi
 }
