@@ -1,4 +1,4 @@
-MODULE UNLOCK AOV SETTINGS
+MODULE UNLOCK SETTINGS LIÊN QUÂN
 - Mở khoá 90/120FPS.
 - Mở khoá camera siêu xa.
 - Mở khoá cấu hình HD
