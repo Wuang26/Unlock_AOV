@@ -156,6 +156,31 @@ select_method() {
     fi
 }
 
+ask_open_release_page() {
+    $echo_kousei ""
+    $echo_kousei "❌ Vui lòng kiểm tra lại phiên bản của Game hoặc Module."
+    $echo_kousei ""
+    $echo_kousei "❓Bạn có muốn mở trang phát hành module không?:"
+    $echo_kousei "  - TĂNG ÂM: Mở trang phát hành module"
+    $echo_kousei "  - GIẢM ÂM: Thoát"
+
+    while true; do
+        key_event=$($getevent_kousei -qlc 1 2>/dev/null | $awk_kousei '{print $3}')
+        case "$key_event" in
+            "KEY_VOLUMEUP")
+                $echo_kousei "🔗 Đang mở trang phát hành module..."
+                $am_kousei start -a android.intent.action.VIEW -d "https://github.com/Wuang26/Unlock_AOV/releases" >/dev/null 2>&1
+                return 0
+                ;;
+            "KEY_VOLUMEDOWN")
+                $echo_kousei "🚪 Thoát."
+                exit 1
+                ;;
+        esac
+        $sleep_kousei 0.1
+    done
+}
+
 # Khởi tạo các công cụ
 getevent_kousei=$(get_tool_path "getevent")
 printf_kousei=$(get_tool_path "printf")
@@ -225,18 +250,31 @@ fi
 
 if [ ! -d "$DEST_FOLDER" ]; then
   $echo_kousei "❌ Thư mục không tồn tại: $DEST_FOLDER"
-  $echo_kousei ""
-  $echo_kousei "❌ Vui lòng kiểm tra lại phiên bản của Module hoặc Game.!"
-  $echo_kousei ""
-  $echo_kousei "⏩ Mở trang phát hành module sau 15 giây...!"
+  $rm_kousei -rf "/data/user/0/com.garena.game.kgvn/files/Resources/*"
+
+  $echo_kousei "⚠️ Thư mục data game hiện không đúng."
+  $echo_kousei "▶️ Vui lòng đừng đóng ứng dụng này mà vào Game và đợi load đến sảnh chính."
+  $echo_kousei "▶️ Sau đó quay lại đây và bấm phím bất kỳ để tiếp tục..."
   $sleep_kousei 15
-  $echo_kousei ""
-  $echo_kousei "🔗 Tải xuống Module mới nhất tại:"
-  $echo_kousei ""
-  $echo_kousei "https://github.com/Wuang26/Unlock_AOV/releases"
-  $am_kousei start -a android.intent.action.VIEW -d "https://github.com/Wuang26/Unlock_AOV/releases" >/dev/null 2>&1
-  exit 1
+  while true; do
+      key_event=$($getevent_kousei -qlc 1 2>/dev/null | $awk_kousei '{print $3}')
+      if [ "$key_event" = "KEY_VOLUMEUP" ] || [ "$key_event" = "KEY_VOLUMEDOWN" ]; then
+          break
+      fi
+      $sleep_kousei 0.1
+  done
+
+$echo_kousei " "
+$echo_kousei "🔃 Đang kiểm tra lại thư mục resources..."
+$sleep_kousei 3
+
+  if [ -d "$RESOURCE_DIR" ]; then
+      $echo_kousei "✅ Tiếp tục..."
+  else
+      ask_open_release_page
+  fi
 fi
+
 
 DEST_FILE="$DEST_FOLDER/libil2cpp.so"
 BACKUP_FOLDER="/data/local/tmp/kousei_backup"
@@ -394,10 +432,30 @@ LATEST_DIR=$($ls_kousei -1t "$RESOURCE_VER" 2>/dev/null | $head_kousei -n 1)
 TARGET_FILE="$RESOURCE_DIR/libil2cpp.so"
 
 if [ ! -d "$RESOURCE_DIR" ]; then
-    $echo_kousei " "
-    $echo_kousei "❌ Thư mục resources không khớp: $RESOURCE_DIR" >&2
-    $rm_kousei -rf "$TMP_DIR"
-    exit 1
+  $echo_kousei "❌ Thư mục không tồn tại: $RESOURCE_DIR"
+  $rm_kousei -rf "/data/user/0/com.garena.game.kgvn/files/Resources/*"
+
+  $echo_kousei "⚠️ Thư mục data game hiện không đúng."
+  $echo_kousei "▶️ Vui lòng đừng đóng ứng dụng này mà vào Game và đợi load đến sảnh chính."
+  $echo_kousei "▶️ Sau đó quay lại đây và bấm phím bất kỳ để tiếp tục..."
+  $sleep_kousei 15
+  while true; do
+      key_event=$($getevent_kousei -qlc 1 2>/dev/null | $awk_kousei '{print $3}')
+      if [ "$key_event" = "KEY_VOLUMEUP" ] || [ "$key_event" = "KEY_VOLUMEDOWN" ]; then
+          break
+      fi
+      $sleep_kousei 0.1
+  done
+
+$echo_kousei " "
+$echo_kousei "🔃 Đang kiểm tra lại thư mục resources..."
+$sleep_kousei 3
+
+  if [ -d "$RESOURCE_DIR" ]; then
+      $echo_kousei "✅ Tiếp tục..."
+  else
+      ask_open_release_page
+  fi
 fi
 
 if [ ! -f "$TARGET_FILE" ]; then
