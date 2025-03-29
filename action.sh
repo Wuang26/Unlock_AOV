@@ -268,7 +268,7 @@ $echo_kousei " "
 $echo_kousei "🔃 Đang kiểm tra lại thư mục resources..."
 $sleep_kousei 3
 
-  if [ -d "$RESOURCE_DIR" ]; then
+  if [ -d "$DEST_FOLDER" ]; then
       $echo_kousei "✅ Tiếp tục..."
   else
       ask_open_release_page
