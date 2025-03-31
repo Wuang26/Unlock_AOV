@@ -508,6 +508,7 @@ else
 fi
 
 version_resources="version=$resources"
+FOLDER_NAME="$resources"
 
 if $grep_kousei -q "FOLDER_NAME=" "$SERVICES_SCRIPT_UP" 2>/dev/null; then
   $sed_kousei -i "s/^FOLDER_NAME=.*/FOLDER_NAME=$FOLDER_NAME/g" "$SERVICES_SCRIPT_UP"
