@@ -415,6 +415,7 @@ rv_60=$(get_value "supported60fpsmode")
 rv_90=$(get_value "supported90fpsmode")
 rv_120=$(get_value "supported120fpsmode")
 rv_both=$(get_value "supportedboth60fps")
+rv_hd=$(get_value "supporthdmode")
 rv_ipad=$(get_value "isipaddevice")
 rv_host=$(get_value "ishostprofile")
 resources=$(get_value "resources")
@@ -488,7 +489,7 @@ patch_file() {
 }
 
 errors=0
-for rva in "$rv_60" "$rv_90" "$rv_120" "$rv_both" "$rv_ipad" "$rv_host"; do
+for rva in "$rv_60" "$rv_90" "$rv_120" "$rv_both" "$rv_hd" "$rv_ipad" "$rv_host"; do
     patch_file "$rva" || ((errors++))
 done
 
