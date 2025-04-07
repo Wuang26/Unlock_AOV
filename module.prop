@@ -10,6 +10,7 @@ supported60fpsmode=0x235fefc
 supported90fpsmode=0x23537e0
 supported120fpsmode=0x2353710
 supportedboth60fps=0x2361694
+supporthdmode=0x2363f90
 isipaddevice=0x2352d28
 ishostprofile=0x2363f90
 arm64=200080D2C0035FD6
