@@ -378,7 +378,7 @@ else
 fi
 
 if [ -z "$LATEST_DIR" ]; then
-    description="description=Không tìm thấy thư mục Resources!"
+    description="description=Unlock settings Liên Quân Mobile."
 else
     RESOURCE_PATH="${RESOURCE_VER}${LATEST_DIR}"
     description="description=Resources Hiện tại: $LATEST_DIR"
@@ -530,7 +530,7 @@ else
 fi
 
 if [ -z "$LATEST_DIR" ]; then
-    description="description=Không tìm thấy thư mục Resources!"
+    description="description=Unlock settings Liên Quân Mobile."
 else
     RESOURCE_PATH="${RESOURCE_VER}${LATEST_DIR}"
     description="description=Resources Hiện tại: $LATEST_DIR"

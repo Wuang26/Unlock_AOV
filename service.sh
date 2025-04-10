@@ -77,10 +77,10 @@ RESOURCE_DIR="/data/data/com.garena.game.kgvn/files/Resources/"
 LATEST_DIR=$($ls_kousei -1t "$RESOURCE_DIR" 2>/dev/null | head -n 1)
 
 if [ -z "$LATEST_DIR" ]; then
-    description="description=❌! Không tìm thấy thư mục Resources!"
+    description="description=Unlock settings Liên Quân Mobile."
 else
     RESOURCE_PATH="${RESOURCE_DIR}${LATEST_DIR}"
-    description="description=✅ Resources Hiện tại: $LATEST_DIR"
+    description="description=Resources Hiện tại: $LATEST_DIR"
 fi
 
 $sed_kousei -i "s/^version=.*/$version_resources/g" "$KOUSEI_VN2"
