@@ -378,10 +378,10 @@ else
 fi
 
 if [ -z "$LATEST_DIR" ]; then
-    description="description=❌! Không tìm thấy thư mục Resources!"
+    description="description=Không tìm thấy thư mục Resources!"
 else
     RESOURCE_PATH="${RESOURCE_VER}${LATEST_DIR}"
-    description="description=✅ Resources Hiện tại: $LATEST_DIR"
+    description="description=Resources Hiện tại: $LATEST_DIR"
 fi
 
 update_module_prop "$version_resources" "$description" "lib"
@@ -530,10 +530,10 @@ else
 fi
 
 if [ -z "$LATEST_DIR" ]; then
-    description="description=❌! Không tìm thấy thư mục Resources!"
+    description="description=Không tìm thấy thư mục Resources!"
 else
     RESOURCE_PATH="${RESOURCE_VER}${LATEST_DIR}"
-    description="description=✅ Resources Hiện tại: $LATEST_DIR"
+    description="description=Resources Hiện tại: $LATEST_DIR"
 fi
 
 update_module_prop "$version_resources" "$description" "hex"
