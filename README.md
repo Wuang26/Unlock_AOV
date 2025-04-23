@@ -1,8 +1,8 @@
 MODULE UNLOCK SETTINGS LIÊN QUÂN
 - Mở khoá 90/120FPS.
 - Mở khoá camera siêu xa.
-- Mở khoá cấu hình HD
-- Mở khoá xem Profile [zygisk ver]
+- Mở khoá cấu hình HD [zygisk]
+- Mở khoá xem Profile
 - Cập nhật theo từng mùa.
 
 
