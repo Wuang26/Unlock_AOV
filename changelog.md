@@ -1,15 +1,12 @@
 ## Liên Quân Mobile
 - PackageName: com.garena.game.kgvn
 
-- Version APK: 1.57.1.8
+- Version APK: 1.58.1.2
 
 - ABI: arm64-v8a
 
-- Resources: 136405864
+- Resources: 137948364
 
-- Date: 23/03/2025
+- Date: 23/04/2025
 
-- Update Module:
--  - Cập nhật công cụ cần thiết.
-   - Hoàn nguyên thuộc tính, thời gian, quyền... khi thay thế hoặc sửa đổi file.
-
+- Tính năng xem profile đã quay trở lại.
