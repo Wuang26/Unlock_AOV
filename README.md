@@ -28,4 +28,4 @@ Hướng dẫn sử dụng:
   - Tải File có dãy số ở release và đổi tên thành: "libil2cpp.so".
   - Sau đó dùng custom recovery chép hoặc di chuyển file "libil2cpp.so" vào thư mục: "/data/data/com.garena.game.kgvn/files/Resources/dãy-số/arm64-v8a/".
   - Lưu ý: hãy kiểm tra dãy số của file tải về trùng khớp với dãy số thư mục để tránh nhầm mùa, và thư mục là "data/data/" chứ không phải "android/data/"
-  - link Video hướng dẫn: "https://drive.google.com/file/d/1ePucpaS6rC1trNdgBg35iuWZIr_cW1FB/"
+  - Link Video hướng dẫn: "https://drive.google.com/file/d/1ePucpaS6rC1trNdgBg35iuWZIr_cW1FB/"
