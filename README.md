@@ -1,7 +1,6 @@
 MODULE UNLOCK SETTINGS LIÊN QUÂN
 - Mở khoá 90/120FPS.
 - Mở khoá camera siêu xa.
-- Mở khoá cấu hình HD [zygisk]
 - Mở khoá xem Profile
 - Cập nhật theo từng mùa.
 
@@ -16,12 +15,9 @@ Miễn trừ trách nhiệm:
  
 Hướng dẫn sử dụng:
 
-- Đối với người dùng không sử dụng zygisk:
-  - Tải phiên bản Module_No_Zygisk.zip và install. Nếu khi có mùa mới hãy đợi thông báo cập nhật và bấm action.
-
-- Đối với người dùng zygisk:
-  - Tải và install phiên bản Module_Zygisk.zip
-
+- Chỉ cần flash module là xong.
+- Nếu không thích sử dụng module có thể tải file action.sh và chạy với quyền root.
+- Nếu khi có mùa mới hãy đợi thông báo cập nhật và bấm action.
 
 - Đối với người dùng không root và có custom recovery như TWRP hay OrangeFox:
 - - Yêu cầu giải mã hoá được bộ nhớ.
