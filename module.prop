@@ -8,7 +8,8 @@ updateJson=https://raw.githubusercontent.com/Wuang26/Unlock_AOV/main/update.json
 resources=143535464
 supported60fpsmode=
 #0x69673b4
-supported90fpsmode=0x69562d4
+supported90fpsmode=
+#0x69562d4
 supported120fpsmode=0x6956214
 supportedboth60fps=
 #0x6969780
