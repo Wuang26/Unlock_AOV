@@ -11,8 +11,10 @@ supported90fpsmode=0x69562d4
 supported120fpsmode=0x6956214
 supportedboth60fps=0x6969780
 supporthdmode=0x696c3d0
-isipaddevice=0x6955788
-ishostprofile=0x75ba564
+isipaddevice=
+#0x6955788
+ishostprofile=
+#0x75ba564
 arm64=200080D2C0035FD6
 hd=Sửa dòng cuối về hex hoặc lib theo mong muốn.
 hex=Sửa mã hex vào thẳng file lib game.
